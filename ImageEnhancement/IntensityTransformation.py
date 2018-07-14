@@ -4,7 +4,7 @@ import matplotlib.image as mpimg
 import numpy as np
 import math
 
-class Transformer:
+class Transformation:
     #Gray= R * 0.299 + G * 0.578 + B * 0.114
     def gray_transform(self,image):
         new_image=np.zeros(image.shape)
@@ -158,11 +158,11 @@ class Transformer:
                 new_image[x,y]=[hist[image[x,y,0]],hist[image[x,y,0]],hist[image[x,y,0]]]
         return new_image.astype(np.uint8)
 
-        
+
 if __name__ == '__main__':
     max_count=12
     image = mpimg.imread('./image/lena.bmp')
-    transformer=Transformer()
+    transformer=Transformation()
     
     fig = plt.figure()
     fig.set_size_inches(4,max_count*4)
