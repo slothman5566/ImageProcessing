@@ -169,7 +169,6 @@ if __name__ == '__main__':
 
     temp=fig.add_subplot(max_count,1,1)
     temp.set_title('lena')
-    
     plt.imshow(image)
     
     temp=fig.add_subplot(max_count,1,2)
