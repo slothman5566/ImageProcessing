@@ -5,7 +5,6 @@ import numpy as np
 import random
 
 class ImageFilter:
-    #Gray= R * 0.299 + G * 0.578 + B * 0.114
     def make_saltNoise(self, image,noise):
         newImage=np.zeros(image.shape,np.uint8)
         for i in range(image.shape[0]):
@@ -28,7 +27,7 @@ class ImageFilter:
                 for rx in range(i-1,i+2):
                     for ry in range(j-1,j+2):
                         np.add(rgb_array,image[rx,ry],rgb_array)
-                newImage[i,j]=[rgb_array[0]/9,rgb_array[1]/9,rgb_array[2]/9]
+                newImage[i,j]=rgb_array/9
 
         return newImage
     def make_guassianFilter(self,image):
@@ -40,10 +39,22 @@ class ImageFilter:
                 rgb_array=np.zeros(3)
                 for rx in range(i-1,i+2):
                     for ry in range(j-1,j+2):
+
                         np.add(rgb_array,image[rx,ry]*mask[rx-i+1,ry-j+1],rgb_array)
-                newImage[i,j]=[rgb_array[0]/16,rgb_array[1]/16,rgb_array[2]/16]
+                
+                newImage[i,j]=rgb_array/16
 
         return newImage
+
+    def make_medianFilter(self,image):
+        image=np.array(image,np.int32)
+        newImage=np.zeros(image.shape,np.uint8)
+        for i in range(1,image.shape[0]-1):
+            for j in range(1,image.shape[1]-1):    
+                newImage[i,j]=[sorted(image[i-1:i+2,j-1:j+2][:,:,0].reshape(9))[4],sorted(image[i-1:i+2,j-1:j+2][:,:,1].reshape(9))[4],sorted(image[i-1:i+2,j-1:j+2][:,:,2].reshape(9))[4]]
+
+        return newImage
+
 
     
 if __name__ == '__main__':
@@ -60,7 +71,7 @@ if __name__ == '__main__':
 
     temp=fig.add_subplot(max_count,1,2)
     temp.set_title('noise lena')
-    noise_image=fliter.make_saltNoise(image,0.1)
+    noise_image=fliter.make_saltNoise(image,0.05)
     plt.imshow(noise_image)
 
     temp=fig.add_subplot(max_count,1,3)
@@ -69,5 +80,10 @@ if __name__ == '__main__':
 
     temp=fig.add_subplot(max_count,1,4)
     temp.set_title('guassianFilter')
-    plt.imshow(fliter.make_guassianFilter(noise_image))    
+    plt.imshow(fliter.make_guassianFilter(noise_image))   
+    
+    temp=fig.add_subplot(max_count,1,5)
+    temp.set_title('medianFilter')
+    plt.imshow(fliter.make_medianFilter(noise_image))   
+
     plt.show()
