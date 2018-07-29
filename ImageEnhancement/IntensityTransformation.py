@@ -11,7 +11,6 @@ class Transformation:
         for x in range(image.shape[0]):
             for y in range(image.shape[1]):
                 gray=(int)(image[x,y][0]* 0.299+image[x,y][1]* 0.578+image[x,y][2]* 0.114)
-               
                 new_image[x,y]=[gray,gray,gray]
         return new_image.astype(np.uint8)
 
@@ -28,8 +27,9 @@ class Transformation:
         new_image=np.zeros(image.shape)
         for x in range(image.shape[0]):
             for y in range(image.shape[1]):
-                new_image[x,y]=[225,255,255] if image[x,y,0]>120 else [0,0,0]
-        return new_image
+                gray=(image[x,y][0]* 0.299+image[x,y][1]* 0.578+image[x,y][2]* 0.114)
+                new_image[x,y]=[255,255,255] if gray>128 else [0,0,0]
+        return new_image.astype(np.uint8)
 
     def binarization_transform_with_threshold(self, image):
         new_image=np.zeros(image.shape)
@@ -37,11 +37,11 @@ class Transformation:
             for y in range(image.shape[1]):
                 gray=image[x,y,0]
                 if(gray>200):
-                    new_image[x,y]=[225,255,255]
+                    new_image[x,y]=[255,255,255]
                 elif(gray>150):
                     new_image[x,y]=[0,0,0]
                 elif(gray>100):
-                    new_image[x,y]=[225,255,255]
+                    new_image[x,y]=[255,255,255]
                 elif(gray>50):
                     new_image[x,y]=[0,0,0]
                 
@@ -182,7 +182,7 @@ if __name__ == '__main__':
     
     temp=fig.add_subplot(max_count,1,4)
     temp.set_title('binarization')
-    plt.imshow(transformer.binarization_transform(gray_image))
+    plt.imshow(transformer.binarization_transform(image))
 
     temp=fig.add_subplot(max_count,1,5)
     temp.set_title('binarization_with_threshold')
